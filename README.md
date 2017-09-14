@@ -1,8 +1,6 @@
-## Welcome to GitHub Pages
+## OrangeMsg
 
-You can use the [editor on GitHub](https://github.com/appleseed-wb/OrangeMsg/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+消息中心接口文档包括 **消息发送** 部分和 **消息接收** 部分，消息发送部分主要针对后端业务触发消息，如变更课程提醒；消息接收部分主要针对前端数据显示，如个人消息盒子等功能，主要提供了消息分页查看及查看消息详情等功能性接口。
 
 ### Markdown
 
