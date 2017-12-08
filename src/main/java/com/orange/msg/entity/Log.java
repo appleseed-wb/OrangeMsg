@@ -3,8 +3,6 @@ package com.orange.msg.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 /**
  * 业务日志
  */
@@ -31,6 +29,11 @@ public class Log {
      * 操作人
      */
     private Long operUid;
+
+    /**
+     * 操作人姓名
+     */
+    private String operName;
 
     /**
      * 操作时间
@@ -75,5 +78,13 @@ public class Log {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getOperName() {
+        return operName;
+    }
+
+    public void setOperName(String operName) {
+        this.operName = operName;
     }
 }

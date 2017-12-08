@@ -6,16 +6,17 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * 系统通知读取记录
+ * 业务消息读取记录
  */
-@Document(collection = "mms_notice_log")
-public class NoticeLog {
+@Document(collection = "mms_business_log")
+public class BusinessLog {
 
     /**
      * 主键
      */
     @Id
     private ObjectId id;
+
     /**
      * 消息唯一编号，非主键
      */
@@ -32,7 +33,7 @@ public class NoticeLog {
     private String targetName;
 
     /**
-     * 日志记录时间
+     * 消息时间
      */
     private Long operTime;
 
@@ -50,7 +51,7 @@ public class NoticeLog {
      * 关联通知对象，分页查询时使用
      */
     @DBRef
-    private Notice notice;
+    private Business business;
 
     public String getUuid() {
         return uuid;
@@ -92,19 +93,19 @@ public class NoticeLog {
         this.status = status;
     }
 
-    public Notice getNotice() {
-        return notice;
-    }
-
-    public void setNotice(Notice notice) {
-        this.notice = notice;
-    }
-
     public Integer getDispatch() {
         return dispatch;
     }
 
     public void setDispatch(Integer dispatch) {
         this.dispatch = dispatch;
+    }
+
+    public Business getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(Business business) {
+        this.business = business;
     }
 }

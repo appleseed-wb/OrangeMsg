@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * 通知操作
+ * 系统通知操作
  */
 public interface NoticeService {
 
@@ -15,7 +15,7 @@ public interface NoticeService {
      * 保存通知操作
      * @param msg
      */
-    public void saveNotice(String uuid,Long time,String msg);
+    public void saveNotice(String uuid, Long time, String msg);
 
     /**
      * 获取所有通知

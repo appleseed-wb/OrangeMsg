@@ -1,6 +1,5 @@
 package com.orange.msg.web;
 
-import com.orange.msg.constant.MsgConstant;
 import com.orange.msg.service.NoticeLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 系统通知
+ */
 @RestController
 public class NoticeController {
 
@@ -28,7 +30,7 @@ public class NoticeController {
      */
     @RequestMapping(value = "/notice/{id}", method = RequestMethod.GET)
     public Object getAll(@PathVariable Long id,@PageableDefault(sort = {"operTime"},direction = Sort.Direction.DESC) Pageable pageable){
-        return noticeLogService.findByTargetUidAndActionAndStatus(id, MsgConstant.NOTICE_LOG_READ, 1, pageable);
+        return noticeLogService.findByTargetUid(id, pageable);
     }
 
     /**

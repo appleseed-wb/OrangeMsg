@@ -1,11 +1,8 @@
 package com.orange.msg.dispatcher;
 
-import org.springframework.stereotype.Component;
-
 /**
  * 消息动作调用
  */
-@Component
 public class ActionDispatcher {
 
     private AbstractAction action;

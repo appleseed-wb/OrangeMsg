@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.orange.msg.constant.MsgConstant;
 import com.orange.msg.dispatcher.*;
 import com.orange.msg.entity.Message;
-import com.orange.msg.service.BusinessService;
-import com.orange.msg.service.LogService;
 import com.orange.msg.service.MessageService;
-import com.orange.msg.service.NoticeService;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -24,11 +21,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
-import org.springframework.util.concurrent.SettableListenableFuture;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Configuration for kafka producers and consumers.
@@ -50,17 +45,6 @@ public class KafkaConf {
     @Value("${kafka-auto-reset-offset}")
     private String kafkaAutoResetOffset;
 
-    @Value("${kafka-topic}")
-    private String kafkaTopic;
-
-    private static LinkedBlockingQueue<SettableListenableFuture<String>> queue;
-
-	@Autowired
-	private LogService logService;
-	@Autowired
-	private NoticeService noticeService;
-	@Autowired
-	private BusinessService businessService;
 	@Autowired
 	private MessageService messageService;
 
@@ -120,21 +104,6 @@ public class KafkaConf {
         return factory;
     }
 
-	@Bean
-    public LinkedBlockingQueue<SettableListenableFuture<String>> blockingQueue() {
-	    if (null == queue) {
-	        queue = new LinkedBlockingQueue<>(queueSize);
-        }
-	    return queue;
-    }
-
-	@KafkaListener(topics = "${kafka-topic}")
-	public void listener(String payload) throws Exception {
-        SettableListenableFuture<String> future = new SettableListenableFuture<>();
-		future.set(payload);
-		queue.put(future);
-	}
-
 	@KafkaListener(topics = {MsgConstant.TOPIC_LOG, MsgConstant.TOPIC_NOTICE, MsgConstant.TOPIC_BUSINESS})
 	public void listener(ConsumerRecord<String,String> record) throws Exception {
 		String topic = record.topic();
@@ -146,28 +115,30 @@ public class KafkaConf {
 			messageService.saveMessage(message);
 
 			ActionDispatcher dispatcher = new ActionDispatcher();
-
-			System.out.println("执行消息代码 >>> " + message.getAction());
-			switch (message.getAction()){
-				case MsgConstant.ACTION_NOTICE_CREATE:
-					dispatcher.setAction(new NoticeCreateAction(message));
-					break;
-				case MsgConstant.ACTION_BUSINESS_CREATE:
-					dispatcher.setAction(new BusinessCreateAction(message));
-					break;
-				case MsgConstant.ACTION_LOG_CREATE:
-					dispatcher.setAction(new LogCreateAction(message));
-					break;
-				case MsgConstant.ACTION_NOTICE_PULL:
-					dispatcher.setAction(new NoticeSyncAction(message));
-					break;
-				default:
-					dispatcher.setAction(new DefaultAction(message));
-					break;
-			}
-
+			dispatcher.setAction(getAction(message));
 			dispatcher.dispatch();
-
 		}
+	}
+
+	private AbstractAction getAction(Message message){
+		AbstractAction action = null;
+		switch (message.getAction()){
+			case MsgConstant.ACTION_NOTICE_CREATE:
+				action = new NoticeCreateAction(message);
+				break;
+			case MsgConstant.ACTION_BUSINESS_CREATE:
+				action = new BusinessCreateAction(message);
+				break;
+			case MsgConstant.ACTION_LOG_CREATE:
+				action = new LogCreateAction(message);
+				break;
+			case MsgConstant.ACTION_NOTICE_PULL:
+				action = new NoticeSyncAction(message);
+				break;
+			default:
+				action = new DefaultAction(message);
+				break;
+		}
+		return action;
 	}
 }

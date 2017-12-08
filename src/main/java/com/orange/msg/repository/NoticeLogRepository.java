@@ -12,7 +12,13 @@ import java.util.List;
 @Repository
 public interface NoticeLogRepository extends MongoRepository<NoticeLog,String> {
 
-    public Page<NoticeLog> findByTargetUidAndActionAndStatus(Long id, String action, Integer status, Pageable pageable);
+    /**
+     * 分页获取系统通知
+     * @param id
+     * @param pageable
+     * @return
+     */
+    public Page<NoticeLog> findByTargetUid(Long id, Pageable pageable);
 
     /**
      * 获取用户最后一条通知
@@ -35,5 +41,5 @@ public interface NoticeLogRepository extends MongoRepository<NoticeLog,String> {
      * @param uuid
      * @return
      */
-    public NoticeLog findByTargetUidAndUuid(Long id,String uuid);
+    public NoticeLog findByTargetUidAndUuid(Long id, String uuid);
 }

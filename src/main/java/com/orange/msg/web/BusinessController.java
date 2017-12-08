@@ -1,5 +1,6 @@
 package com.orange.msg.web;
 
+import com.orange.msg.service.BusinessLogService;
 import com.orange.msg.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 业务消息
+ */
 @RestController
 public class BusinessController {
 
     @Autowired
     private BusinessService businessService;
+    @Autowired
+    private BusinessLogService businessLogService;
 
     /**
      * 业务消息分页查询
@@ -27,7 +33,7 @@ public class BusinessController {
      */
     @RequestMapping(value = "/business/{id}", method = RequestMethod.GET)
     public Object getAll(@PathVariable Long id,@PageableDefault(sort = {"operTime"},direction = Sort.Direction.DESC) Pageable pageable){
-        return businessService.findByTargetUid(id,pageable);
+        return businessLogService.findByTargetUid(id,pageable);
     }
 
     /**
@@ -38,7 +44,7 @@ public class BusinessController {
      */
     @RequestMapping(value = "/business/{id}/{uuid}", method = RequestMethod.GET)
     public Object getOne(@PathVariable Long id,@PathVariable String uuid){
-        return businessService.findOne(uuid);
+        return businessLogService.findByTargetUidAndUuid(id, uuid);
     }
 
     /**
@@ -49,7 +55,7 @@ public class BusinessController {
      */
     @RequestMapping(value = "/business/{id}/{uuid}", method = RequestMethod.PUT)
     public Object put(@PathVariable Long id,@PathVariable String uuid){
-        businessService.setRead(uuid);
+        businessLogService.setRead(id, uuid);
         Map result = new HashMap<>();
         result.put("status",0);
         result.put("msg","成功");

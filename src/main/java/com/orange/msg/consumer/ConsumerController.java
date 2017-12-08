@@ -1,9 +1,9 @@
 package com.orange.msg.consumer;
 
 import com.orange.msg.constant.MsgConstant;
-import com.orange.msg.entity.Business;
+import com.orange.msg.entity.BusinessLog;
 import com.orange.msg.entity.NoticeLog;
-import com.orange.msg.service.BusinessService;
+import com.orange.msg.service.BusinessLogService;
 import com.orange.msg.service.NoticeLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,21 +23,24 @@ import java.util.Map;
 public class ConsumerController {
 
 	@Autowired
-	private BusinessService businessService;
+	private BusinessLogService businessLogService;
 	@Autowired
 	private NoticeLogService noticeLogService;
 
 	@RequestMapping(value = "/receive_message/{id}", method = RequestMethod.GET)
 	public Object processReceiveMessage(@PathVariable Long id) {
-		List<Business> businesses = businessService.findDispatchBusiness(id);
+		//业务消息
+		List<BusinessLog> businessLogs = businessLogService.findDispatchBusiness(id);
+		if (businessLogs==null)businessLogs = new ArrayList<>();
 		List<NoticeLog> noticeLogs = noticeLogService.findDispatchNotice(id);
-
+		if (noticeLogs==null)noticeLogs = new ArrayList<>();
+		//系统通知
 		List<Map> content = new ArrayList<>();
-		for (Business business : businesses) {
+		for (BusinessLog businessLog : businessLogs) {
 			Map item = new HashMap<>();
 			item.put("type", MsgConstant.TOPIC_BUSINESS);
-			item.put("uuid",business.getUuid());
-			item.put("content",business.getContent());
+			item.put("uuid",businessLog.getUuid());
+			item.put("content",businessLog.getBusiness().getContent());
 			content.add(item);
 		}
 		for (NoticeLog noticeLog : noticeLogs) {
@@ -52,6 +55,8 @@ public class ConsumerController {
 		map.put("status",0);
 		map.put("msg","成功");
 		map.put("content",content);
+		map.put("totalBusinesses",businessLogs.size());
+		map.put("totalNotices",noticeLogs.size());
 		map.put("totalElements",content.size());
 		return map;
 	}

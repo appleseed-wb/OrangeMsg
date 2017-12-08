@@ -3,10 +3,8 @@ package com.orange.msg.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 /**
- * 业务
+ * 业务消息
  */
 @Document(collection = "mms_business")
 public class Business {
@@ -38,29 +36,9 @@ public class Business {
     private Long operTime;
 
     /**
-     * 接收人
-     */
-    private Long targetUid;
-
-    /**
-     * 接收人姓名
-     */
-    private String targetName;
-
-    /**
      * 消息内容
      */
     private String content;
-
-    /**
-     * 读取状态 1.未读 2.已读
-     */
-    private Integer status;
-
-    /**
-     * 分发状态 1.未分发 2.已分发
-     */
-    private Integer dispatch;
 
     public String getAction() {
         return action;
@@ -94,22 +72,6 @@ public class Business {
         this.operTime = operTime;
     }
 
-    public Long getTargetUid() {
-        return targetUid;
-    }
-
-    public void setTargetUid(Long targetUid) {
-        this.targetUid = targetUid;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
     public String getContent() {
         return content;
     }
@@ -126,19 +88,4 @@ public class Business {
         this.uuid = uuid;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getDispatch() {
-        return dispatch;
-    }
-
-    public void setDispatch(Integer dispatch) {
-        this.dispatch = dispatch;
-    }
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 异常统一处理
+ * 统一异常处理
  */
 @ControllerAdvice
 public class ExceptionController {

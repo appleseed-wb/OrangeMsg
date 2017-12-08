@@ -2,6 +2,9 @@ package com.orange.msg.service;
 
 import com.orange.msg.entity.Message;
 
+/**
+ * 消息统一记录
+ */
 public interface MessageService {
 
     /**

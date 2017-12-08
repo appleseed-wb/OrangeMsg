@@ -23,8 +23,8 @@ public class NoticeLogServiceImpl implements NoticeLogService {
     private NoticeService noticeService;
 
     @Override
-    public Page<NoticeLog> findByTargetUidAndActionAndStatus(Long id, String action, Integer status, Pageable pageable) {
-        return noticeLogRepository.findByTargetUidAndActionAndStatus(id, action, status, pageable);
+    public Page<NoticeLog> findByTargetUid(Long id, Pageable pageable) {
+        return noticeLogRepository.findByTargetUid(id, pageable);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class NoticeLogServiceImpl implements NoticeLogService {
             NoticeLog noticeLog = new NoticeLog();
             noticeLog.setOperTime(notice.getOperTime());
             noticeLog.setUuid(notice.getUuid());
-            noticeLog.setAction(MsgConstant.NOTICE_LOG_READ);
+            noticeLog.setDispatch(MsgConstant.MSG_DISPATCH_NO);
             noticeLog.setStatus(MsgConstant.MSG_STATUS_UNREAD);
             noticeLog.setTargetName(null);
             noticeLog.setTargetUid(id);
@@ -54,7 +54,12 @@ public class NoticeLogServiceImpl implements NoticeLogService {
 
     @Override
     public List<NoticeLog> findDispatchNotice(Long id) {
-        return noticeLogRepository.findDispatchNotice(id);
+        List<NoticeLog> list = noticeLogRepository.findDispatchNotice(id);
+        for (NoticeLog noticeLog : list) {
+            noticeLog.setDispatch(MsgConstant.MSG_DISPATCH_YES);
+        }
+        noticeLogRepository.save(list);
+        return list;
     }
 
     @Override
