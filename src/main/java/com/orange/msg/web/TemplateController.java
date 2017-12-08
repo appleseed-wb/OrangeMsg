@@ -29,6 +29,7 @@ public class TemplateController {
      */
     @RequestMapping(value = "/template", method = RequestMethod.GET)
     public Object getAll(@PageableDefault(sort = {"createTime"},direction = Sort.Direction.DESC) Pageable pageable){
+        // TODO 消息模版分页查询
         return null;
     }
 
@@ -39,6 +40,7 @@ public class TemplateController {
      */
     @RequestMapping(value = "/template", method = RequestMethod.POST)
     public Object create(@PathVariable String uuid){
+        // TODO 创建消息模版
         Map result = new HashMap<>();
         result.put("status",0);
         result.put("msg","成功");
@@ -62,6 +64,7 @@ public class TemplateController {
      */
     @RequestMapping(value = "/template/{uuid}", method = RequestMethod.PUT)
     public Object update(@PathVariable String uuid){
+        // TODO 更新消息模版
         Map result = new HashMap<>();
         result.put("status",0);
         result.put("msg","成功");
