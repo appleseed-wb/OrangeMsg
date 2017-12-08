@@ -9,13 +9,13 @@ import javax.servlet.Filter;
 @Configuration
 public class FilterConf {
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean indexFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-//        registration.setFilter(OAuthFilter());
-//        registration.addUrlPatterns("/business/*");
-//        registration.addUrlPatterns("/notice/*");
-//        registration.addUrlPatterns("/receive_message/*");
+        registration.setFilter(OAuthFilter());
+        registration.addUrlPatterns("/business/*");
+        registration.addUrlPatterns("/notice/*");
+        registration.addUrlPatterns("/receive_message/*");
         return registration;
     }
 
